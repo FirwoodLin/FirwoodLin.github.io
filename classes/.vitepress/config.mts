@@ -39,7 +39,17 @@ export default defineConfig({
           const localLinks: boolean[] = []
           for (const token of tokens) {
             if (token.children) visit(token.children)
-            if (token.type === 'link_open') {
+            if (token.type === 'image') {
+              const src = token.attrGet('src') || ''
+              const path = decodeURIComponent(src.split('#')[0].split('?')[0])
+              const relative = state.env.relativePath || 'index.md'
+              const target = resolve(here, '../content', dirname(relative), path)
+              if (path && !/^(?:[a-z]+:|\/)/i.test(path) && !existsSync(target)) {
+                token.type = 'html_inline'; token.tag = ''; token.nesting = 0
+                token.content = `<span class="local-resource" title="图片仅本地可用，未随笔记发布">${md.utils.escapeHtml(token.content || '图片')}</span>`
+                token.children = null; token.attrs = null
+              }
+            } else if (token.type === 'link_open') {
               const href = token.attrGet('href') || ''
               const path = decodeURIComponent(href.split('#')[0].split('?')[0])
               const relative = state.env.relativePath || 'index.md'
