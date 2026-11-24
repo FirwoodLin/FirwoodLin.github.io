@@ -2,47 +2,64 @@ name: Pages
 
 on:
   push:
-    branches:
-      - main  # default branch
+    branches: [main]
+  workflow_dispatch:
+  schedule:
+    - cron: '17 */6 * * *'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          # If your repository depends on submodule, please see: https://github.com/actions/checkout
-          submodules: recursive
-      - name: Use Node.js 16.x
-        uses: actions/setup-node@v2
+          persist-credentials: false
+      - name: Check course access configuration
+        env:
+          CLASSES_READ_TOKEN: ${{ secrets.CLASSES_READ_TOKEN }}
+        run: |
+          if [ -z "$CLASSES_READ_TOKEN" ]; then
+            echo '::error::Configure CLASSES_READ_TOKEN with read access to SJTU-Classes.'
+            exit 1
+          fi
+      - name: Read course notes
+        uses: actions/checkout@v4
         with:
-          node-version: '20'
-      - name: Cache NPM dependencies
-        uses: actions/cache@v2
+          repository: FirwoodLin/SJTU-Classes
+          ref: main
+          token: ${{ secrets.CLASSES_READ_TOKEN }}
+          path: .classes-source
+          persist-credentials: false
+      - uses: actions/setup-node@v4
         with:
-          path: node_modules
-          key: ${{ runner.OS }}-npm-cache
-          restore-keys: |
-            ${{ runner.OS }}-npm-cache
-      - name: Install Dependencies
-        run: npm install
-      - name: Build
-        run: npm run build
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v2
+          node-version: '22'
+          cache: npm
+      - uses: actions/configure-pages@v5
+      - run: npm ci
+      - name: Build blog and course notes
+        run: npm run site:build
+      - name: Check generated site
+        run: npm run site:check
+      - uses: actions/upload-pages-artifact@v3
         with:
           path: ./public
   deploy:
     needs: build
+    runs-on: ubuntu-latest
     permissions:
       pages: write
       id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v2
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,29 @@
+:root {
+  --vp-c-brand-1: #2563eb;
+  --vp-c-brand-2: #1d4ed8;
+  --vp-c-brand-3: #3b82f6;
+  --vp-font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', sans-serif;
+  --vp-sidebar-width: 280px;
+}
+.vp-doc { font-size: 16px; }
+.vp-doc p, .vp-doc li { line-height: 1.9; }
+.vp-doc .MathJax { max-width: 100%; overflow-x: auto; overflow-y: hidden; }
+.vp-doc mjx-container[display='true'] { padding: .5rem 0; }
+.vp-doc table { width: 100%; }
+.vp-doc details { margin: .7rem 0 1.2rem; border: 1px solid var(--vp-c-divider); border-radius: 8px; padding: .6rem 1rem; }
+.vp-doc summary { cursor: pointer; color: var(--vp-c-brand-1); font-weight: 500; }
+.local-resource { color: var(--vp-c-text-2); border-bottom: 1px dotted var(--vp-c-text-3); }
+.local-resource::after { content: '（本地资料）'; font-size: .85em; }
+.study-intro { padding: 1.5rem 0 1rem; }
+.study-intro .eyebrow { color: var(--vp-c-brand-1); font-size: .875rem; letter-spacing: .12em; font-weight: 600; }
+.study-intro h1 { font-size: clamp(2rem, 5vw, 3rem); line-height: 1.25; }
+.study-intro .lead { color: var(--vp-c-text-2); font-size: 1.125rem; max-width: 35rem; }
+.course-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; margin: 1.5rem 0 2.5rem; }
+.vp-doc a.course-card { display: block; padding: 1.4rem; border: 1px solid var(--vp-c-divider); border-radius: 12px; text-decoration: none; color: var(--vp-c-text-1); background: var(--vp-c-bg-soft); transition: border-color .15s; }
+.vp-doc a.course-card:hover { border-color: var(--vp-c-brand-1); }
+.course-subject { color: var(--vp-c-brand-1); font-size: .75rem; font-weight: 600; letter-spacing: .08em; }
+.vp-doc .course-card h2 { border: 0; margin: .6rem 0; padding: 0; font-size: 1.3rem; }
+.vp-doc .course-card p { color: var(--vp-c-text-2); margin: .5rem 0 1rem; }
+.course-count { color: var(--vp-c-text-2); font-size: .875rem; }
+.study-meta { margin-top: 2.5rem; color: var(--vp-c-text-3); font-size: .875rem; }
+@media (min-width: 1200px) { .course-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }

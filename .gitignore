@@ -1,3 +1,8 @@
 public/
 one_step/
 node_modules/
+classes/content/
+classes/.vitepress/catalog.json
+classes/.vitepress/cache/
+classes/.vitepress/dist/
+.classes-source/

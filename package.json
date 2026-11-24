@@ -4,6 +4,11 @@
   "private": true,
   "scripts": {
     "build": "hexo generate",
+    "classes:prepare": "node tools/prepare-classes.mjs",
+    "classes:build": "npm run classes:prepare && vitepress build classes",
+    "classes:preview": "vitepress preview classes --host 127.0.0.1",
+    "site:build": "npm run clean && npm run build && npm run classes:build",
+    "site:check": "node tools/check-site.mjs",
     "clean": "hexo clean",
     "deploy": "hexo deploy",
     "server": "hexo server"
@@ -23,5 +28,10 @@
     "hexo-renderer-stylus": "^3.0.0",
     "hexo-server": "^3.0.0",
     "hexo-theme-landscape": "^1.0.0"
+  },
+  "devDependencies": {
+    "github-slugger": "2.0.0",
+    "markdown-it-mathjax3": "4.3.2",
+    "vitepress": "1.6.4"
   }
 }
